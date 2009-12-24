@@ -1,0 +1,45 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   i18n_domain="zojax.ownership">
+
+  <role
+     id="content.Owner"
+     title="Content owner" />
+
+  <role
+     id="content.GroupOwner"
+     title="Content group owner" />
+
+  <permission
+     id="zojax.changeOwnership"
+     title="Change ownership"
+     description="Change object ownership." />
+
+  <adapter factory=".owner.Ownership" />
+
+  <adapter
+     provides=".interfaces.IOwnership"
+     factory=".owner.InheritedOwnership" />
+
+  <class class=".owner.Ownership">
+    <require
+       permission="zope.View"
+       interface=".interfaces.IOwnership" />
+    <require
+       permission="zojax.changeOwnership"
+       set_schema=".interfaces.IOwnership" />
+  </class>
+
+  <adapter factory=".principalgroups.principalGroups" />
+
+  <adapter
+     name="zojax.ownership-owner"
+     factory=".localroles.getLocalRoles" />
+
+  <adapter
+     name="zojax.ownership-groupowner"
+     factory=".localroles.getGroupLocalRoles" />
+
+  <subscriber handler=".owner.initObjectOwnership" />
+
+</configure>
